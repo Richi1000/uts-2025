@@ -70,10 +70,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         if ($this->hasRole('super_admin') && $panel->getId() === 'admin') {
             return true;
         }
-        if ($this->hasRole('murid') && $panel->getId() === 'murid') {
+        if ($this->hasRole('Murid') && $panel->getId() === 'murid') {
             return true;
         }
-        if ($this->hasRole('guru') && $panel->getId() === 'guru') {
+        if ($this->hasRole('Guru') && $panel->getId() === 'guru') {
             return true;
         }
         Auth::logout();
@@ -82,9 +82,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return false;
     }
 
-    public function client(): HasOne
+    public function murid(): HasOne
     {
         return $this->hasOne(Murid::class);
+    }
+
+    public function guru(): HasOne
+    {
+    return $this->hasOne(Guru::class, 'user_id');
     }
 }
 

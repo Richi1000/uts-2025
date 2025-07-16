@@ -12,27 +12,44 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class MataPelajaranResource extends Resource
 {
     protected static ?string $model = MataPelajaran::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Mata Pelajaran';
-    protected static ?string $pluralModelLabel = 'Mata Pelajaran';
+
+    public function canAccessPanel(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
-                ->required()
-                ->label('Nama Mata Pelajaran'),
-
-            Forms\Components\Select::make('guru_id')
-                ->relationship('guru', 'nama')
-                ->searchable()
-                ->required()
-                ->label('Pengajar (Guru)'),
+                Forms\Components\TextInput::make('nama_mapel')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('guru_id')
+                    ->required()
+                    ->numeric(),
             ]);
     }
 
@@ -40,18 +57,25 @@ class MataPelajaranResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama')->searchable()->label('Mata Pelajaran'),
-                Tables\Columns\TextColumn::make('guru.nama')->label('Guru Pengampu')->searchable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Dibuat'),
+                Tables\Columns\TextColumn::make('nama_mapel')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('guru_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

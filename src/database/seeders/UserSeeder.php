@@ -24,31 +24,31 @@ class UserSeeder extends Seeder
             ['email' => 'richie@admin.com'],
             ['name' => 'Richie Yaputra', 'password' => Hash::make('password')]
         );
-        $murid1->assignRole('Murid');
+        $murid1->assignRole('murid');
 
         $murid2 = User::firstOrCreate(
             ['email' => 'Hisyam@admin.com'],
             ['name' => 'Hisyam Mubarok', 'password' => Hash::make('password')]
         );
-        $murid2->assignRole('Murid');
+        $murid2->assignRole('murid');
 
         $guru1 = User::firstOrCreate(
             ['email' => 'aryprabowo@admin.com'],
             ['name' => 'Ary Prabowo', 'password' => Hash::make('password')]
         );
-        $guru1->assignRole('Guru');
+        $guru1->assignRole('guru');
 
         $guru2 = User::firstOrCreate(
             ['email' => 'RinaMarlina@admin.com'],
             ['name' => 'RinaMarlina', 'password' => Hash::make('password')]
         );
-        $guru2->assignRole('Guru');
+        $guru2->assignRole('guru');
 
         $guru3 = User::firstOrCreate(
             ['email' => 'Lamria@admin.com'],
             ['name' => 'Lamria', 'password' => Hash::make('password')]
         );
-        $guru3->assignRole('Guru');
+        $guru3->assignRole('guru');
 
         $user = User::firstOrCreate(
             ['email' => 'user@admin.com'],

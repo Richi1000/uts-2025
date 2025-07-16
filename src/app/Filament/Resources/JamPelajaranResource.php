@@ -12,36 +12,45 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class JamPelajaranResource extends Resource
 {
     protected static ?string $model = JamPelajaran::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Jam Pelajaran';
-    protected static ?string $pluralModelLabel = 'Jam Pelajaran';
+
+    public function canAccessPanel(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('hari')
-                    ->options([
-                        'Senin' => 'Senin',
-                        'Selasa' => 'Selasa',
-                        'Rabu' => 'Rabu',
-                        'Kamis' => 'Kamis',
-                        'Jumat' => 'Jumat',
-                        'Sabtu' => 'Sabtu',
-                    ])
+                Forms\Components\TextInput::make('hari')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('jam_mulai')
                     ->required(),
-
-                Forms\Components\TimePicker::make('jam_mulai')
-                    ->required()
-                    ->label('Jam Mulai'),
-
-                Forms\Components\TimePicker::make('jam_selesai')
-                    ->required()
-                    ->label('Jam Selesai'),
+                Forms\Components\TextInput::make('jam_selesai')
+                    ->required(),
             ]);
     }
 
@@ -49,19 +58,24 @@ class JamPelajaranResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('hari')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('jam_mulai')->label('Mulai'),
-                Tables\Columns\TextColumn::make('jam_selesai')->label('Selesai'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Dibuat'),
+                Tables\Columns\TextColumn::make('hari')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jam_mulai'),
+                Tables\Columns\TextColumn::make('jam_selesai'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

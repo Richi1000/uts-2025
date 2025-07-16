@@ -16,8 +16,12 @@ class Guru extends Model
         'alamat',
     ];
 
-    // Relasi ke mata pelajaran (nanti setelah Mapel dibuat)
-    public function mataPelajarans() {
+    public function user() {
+    return $this->belongsTo(User::class);
+    }
+
+    public function mataPelajaran() {
         return $this->hasMany(MataPelajaran::class);
     }
+    
 }

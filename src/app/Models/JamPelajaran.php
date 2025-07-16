@@ -15,7 +15,7 @@ class JamPelajaran extends Model
         'jam_selesai',
     ];
 
-    public function belajars()
+    public function belajar()
     {
         return $this->hasMany(Belajar::class);
     }

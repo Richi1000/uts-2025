@@ -12,45 +12,50 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class NilaiResource extends Resource
 {
     protected static ?string $model = Nilai::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Nilai';
-    protected static ?string $pluralModelLabel = 'Data Nilai';
+
+    public function canAccessPanel(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('murid_id')
-                    ->relationship('murid', 'nama')
+                Forms\Components\TextInput::make('murid_id')
                     ->required()
-                    ->label('Murid')
-                    ->searchable(),
-
-                Forms\Components\Select::make('mata_pelajaran_id')
-                    ->relationship('mataPelajaran', 'nama')
+                    ->numeric(),
+                Forms\Components\TextInput::make('mata_pelajaran_id')
                     ->required()
-                    ->label('Mata Pelajaran')
-                    ->searchable(),
-
+                    ->numeric(),
                 Forms\Components\TextInput::make('nilai')
-                    ->numeric()
                     ->required()
-                    ->label('Nilai'),
-
-                Forms\Components\Select::make('kategori')
-                    ->options([
-                        'Tugas' => 'PR',
-                        'Harian' => 'PS',
-                        'Ujian Tengah' => 'UTS',
-                        'Ujian Akhir' => 'UAS',
-                    ])
+                    ->numeric(),
+                Forms\Components\TextInput::make('kategori')
                     ->required()
-                    ->label('Kategori Penilaian'),
+                    ->maxLength(255),
             ]);
     }
 
@@ -58,20 +63,31 @@ class NilaiResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('murid.nama')->label('Murid')->searchable(),
-                Tables\Columns\TextColumn::make('mataPelajaran.nama')->label('Mata Pelajaran'),
-                Tables\Columns\TextColumn::make('kategori')->label('Kategori'),
-                Tables\Columns\TextColumn::make('nilai')->label('Nilai'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Dibuat'),
+                Tables\Columns\TextColumn::make('murid_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('mata_pelajaran_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('nilai')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('kategori')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

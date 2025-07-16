@@ -14,15 +14,15 @@ class MataPelajaran extends Model
         'guru_id',
     ];
 
-    public function gurus() {
+    public function guru() {
         return $this->belongsTo(Guru::class);
     }
 
-    public function belajars() {
+    public function belajar() {
         return $this->hasMany(Belajar::class);
     }
 
-    public function nilais() {
+    public function nilai() {
         return $this->hasMany(Nilai::class);
     }
 }

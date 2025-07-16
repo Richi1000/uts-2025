@@ -17,15 +17,19 @@ class Murid extends Model
         'no_telepon',
     ];
 
-    public function belajars() {
+    public function user() {
+    return $this->belongsTo(User::class);
+    }
+
+    public function belajar() {
         return $this->hasMany(Belajar::class);
     }
 
-    public function nilais() {
+    public function nilai() {
         return $this->hasMany(Nilai::class);
     }
 
-    public function gurus() {
+    public function guru() {
         return $this->hasMany(Guru::class);
     }
 }
