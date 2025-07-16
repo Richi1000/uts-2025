@@ -14,11 +14,41 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::firstOrCreate(
+        $admin = User::firstOrCreate(
             ['email' => 'admin@admin.com'],
             ['name' => 'Super Admin', 'password' => Hash::make('password')]
         );
-        $user->assignRole('super_admin');
+        $admin->assignRole('super_admin');
+        
+        $murid1 = User::firstOrCreate(
+            ['email' => 'richie@admin.com'],
+            ['name' => 'Richie Yaputra', 'password' => Hash::make('password')]
+        );
+        $murid1->assignRole('Murid');
+
+        $murid2 = User::firstOrCreate(
+            ['email' => 'Hisyam@admin.com'],
+            ['name' => 'Hisyam Mubarok', 'password' => Hash::make('password')]
+        );
+        $murid2->assignRole('Murid');
+
+        $guru1 = User::firstOrCreate(
+            ['email' => 'aryprabowo@admin.com'],
+            ['name' => 'Ary Prabowo', 'password' => Hash::make('password')]
+        );
+        $guru1->assignRole('Guru');
+
+        $guru2 = User::firstOrCreate(
+            ['email' => 'RinaMarlina@admin.com'],
+            ['name' => 'RinaMarlina', 'password' => Hash::make('password')]
+        );
+        $guru2->assignRole('Guru');
+
+        $guru3 = User::firstOrCreate(
+            ['email' => 'Lamria@admin.com'],
+            ['name' => 'Lamria', 'password' => Hash::make('password')]
+        );
+        $guru3->assignRole('Guru');
 
         $user = User::firstOrCreate(
             ['email' => 'user@admin.com'],
