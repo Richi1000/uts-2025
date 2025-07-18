@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('hari');
             $table->time('jam_mulai');
             $table->time('jam_selesai');
+            $table->foreignId('mata_pelajaran_id')->nullable()->constrained('mata_pelajarans')->onDelete('set null');
+            $table->foreignId('guru_id')->constrained('gurus')->onDelete('cascade');
             $table->timestamps();
         });
     }

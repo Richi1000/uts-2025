@@ -17,18 +17,21 @@ class JamPelajaranSeeder extends Seeder
             'hari' => 'Senin',
             'jam_mulai' => '07:00:00',
             'jam_selesai' => '09:30:00',
+            'guru_id' => 1,
         ]);
 
         JamPelajaran::create([
             'hari' => 'Senin',
             'jam_mulai' => '09:30:00',
             'jam_selesai' => '11:30:00',
+            'guru_id' => 2,
         ]);
 
         JamPelajaran::create([
             'hari' => 'Senin',
             'jam_mulai' => '13:00:00',
             'jam_selesai' => '15:30:00',
+            'guru_id' => 3,
         ]);
     }
 }

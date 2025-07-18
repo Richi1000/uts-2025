@@ -22,11 +22,12 @@ class Belajar extends Model
 
     public function mataPelajaran()
     {
-        return $this->belongsTo(MataPelajaran::class);
+    return $this->belongsTo(MataPelajaran::class, 'mata_pelajaran_id');
     }
+
 
     public function jamPelajaran()
     {
-        return $this->belongsTo(JamPelajaran::class);
+    return $this->belongsTo(JamPelajaran::class);
     }
 }

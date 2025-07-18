@@ -11,7 +11,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class MuridResource extends Resource
 {
@@ -20,6 +22,37 @@ class MuridResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Data Murid';
     protected static ?string $pluralModelLabel = 'Murid';
+
+    public function canAccessPanel(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole('Guru') ;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole('Guru');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::check() && Auth::user()->hasAnyRole('Guru');
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

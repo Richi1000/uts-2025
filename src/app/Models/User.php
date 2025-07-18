@@ -89,7 +89,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function guru(): HasOne
     {
-    return $this->hasOne(Guru::class, 'user_id');
+    return $this->hasOne(Guru::class);
     }
 }
 

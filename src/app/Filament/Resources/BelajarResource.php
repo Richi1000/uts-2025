@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,7 +38,17 @@ class BelajarResource extends Resource
 
     public static function canCreate(): bool
     {
-        return Auth::check() && Auth::user()->hasAnyRole('Guru', 'Murid');
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return Auth::check() && Auth::user()->hasRole('Guru');
     }
 
 
@@ -45,15 +56,15 @@ class BelajarResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('murid_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('mata_pelajaran_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('jam_pelajaran_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('mata_pelajaran_id')
+                    ->relationship('mataPelajaran', 'nama')
+                    ->disabled()
+                    ->label('Mata Pelajaran'),
+
+                Forms\Components\Select::make('jam_pelajaran_id')
+                    ->relationship('jamPelajaran', 'hari')
+                    ->disabled()
+                    ->label('Jam Pelajaran'),
             ]);
     }
 
@@ -61,23 +72,18 @@ class BelajarResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('murid_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('mata_pelajaran_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('jam_pelajaran_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('mataPelajaran.nama_mapel')
+                    ->label('Mata Pelajaran')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('jamPelajaran.hari')
+                    ->label('Hari'),
+
+                Tables\Columns\TextColumn::make('jamPelajaran.jam_mulai')
+                    ->label('Jam Mulai'),
+
+                Tables\Columns\TextColumn::make('jamPelajaran.jam_selesai')
+                    ->label('Jam Selesai'),
             ])
             ->filters([
                 //
