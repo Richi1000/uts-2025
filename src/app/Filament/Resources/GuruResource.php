@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class GuruResource extends Resource
@@ -19,6 +20,8 @@ class GuruResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Data Guru';
     protected static ?string $pluralModelLabel = 'Guru';
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -49,12 +52,19 @@ class GuruResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nip')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('nama')->searchable(),
-                Tables\Columns\TextColumn::make('tanggal_lahir')->date(),
-                Tables\Columns\TextColumn::make('alamat')->limit(20),
+                Tables\Columns\TextColumn::make('nip')
+                ->searchable()
+                ->sortable(),
+                Tables\Columns\TextColumn::make('nama')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('tanggal_lahir')
+                ->date(),
+                Tables\Columns\TextColumn::make('alamat')
+                ->limit(20),
                 Tables\Columns\TextColumn::make('no_telepon'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Dibuat'),
+                Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->label('Dibuat'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([

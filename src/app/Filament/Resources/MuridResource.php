@@ -57,10 +57,18 @@ class MuridResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->nullable()
+                    ->searchable()
+                    ->label('User')
+                    ->required(false),
+
                 Forms\Components\TextInput::make('nim')
                     ->required()
                     ->unique()
                     ->label('NIM'),
+                    
                 Forms\Components\TextInput::make('nama')
                     ->required(),
 

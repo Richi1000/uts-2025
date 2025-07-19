@@ -57,7 +57,7 @@ class BelajarResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('mata_pelajaran_id')
-                    ->relationship('mataPelajaran', 'nama')
+                    ->relationship('mataPelajaran', 'nama.mapel')
                     ->disabled()
                     ->label('Mata Pelajaran'),
 

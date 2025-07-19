@@ -58,7 +58,7 @@ class MataPelajaranResource extends Resource
                 Forms\Components\TextInput::make('nama_mapel')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('guru_id')
+                Forms\Components\TextInput::make('guru_name')
                     ->required()
                     ->numeric(),
             ]);
@@ -68,11 +68,12 @@ class MataPelajaranResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_mapel')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('guru_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Mata Pelajaran'),
+
+                Tables\Columns\TextColumn::make('guru.nama')
+                    ->label('Nama Guru'),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
